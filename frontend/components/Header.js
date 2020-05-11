@@ -1,15 +1,76 @@
 import Nav from './Nav'
+import Link from 'next/link'
+import styled from 'styled-components'
+
+const Logo = styled.h1`
+  font-size: 4rem;
+  margin-left: 2rem;
+  position: relative;
+  z-index: 2;
+  -webkit-filter: drop-shadow(${({theme}) => theme.bs});
+  filter        : drop-shadow(${({theme}) => theme.bs});
+  
+
+  a {
+    padding: 0.5rem 0rem 0.5rem 1rem;
+    background: ${({ theme }) => theme.blue};
+    color: white;
+    text-transform: lowercase;
+    text-decoration: none;
+    &:after {
+      top: 50%;
+      border: solid transparent;
+      content: ' ';
+      height: 0;
+      width: 0;
+      position: absolute;
+      border-left-color: ${({theme}) => theme.blue};
+      border-width: 3rem;
+      margin-top: -3rem;
+    }
+  }
+
+  @media (max-width: 1300px) {
+    margin: 0;
+    text-align: center;
+  }
+`
+
+const StyledHeader = styled.header`
+  .bar {
+    border-bottom: 10px solid ${({ theme }) => theme.yellow};
+    display: grid;
+    grid-template-columns: auto 1fr;
+    justify-content: space-between;
+    align-items: stretch;
+    @media (max-width: 1300px) {
+      grid-template-columns: 1fr;
+      justify-content: center;
+    }
+  }
+
+  .sub-bar {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    border-bottom: 1px solid ${({ theme }) => theme.lightgrey};
+    box-shadow: ${({theme}) => theme.bs};
+  }
+`
 
 const Header = () =>
-  <div>
+  <StyledHeader>
     <div className='bar'>
-      <a href="">garb-n-go</a>
+      <Logo>
+        <Link href='/'>
+          <a>garb-n-go</a>
+        </Link>
+      </Logo>
       <Nav />
     </div>
     <div className='sub-bar'>
       <p>Search</p>
     </div>
     <div>Cart</div>
-  </div>
+  </StyledHeader>
 
 export default Header
