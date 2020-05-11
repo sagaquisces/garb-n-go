@@ -1,0 +1,91 @@
+{
+  "name": "garb-n-go-frontend",
+  "version": "1.0.0",
+  "description": "An online clothing store using React, Graphql, Next and Apollo",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sagaquisces/garb-n-go.git"
+  },
+  "author": "Michael David Dunlap",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sagaquisces/garb-n-go/issues"
+  },
+  "homepage": "https://github.com/sagaquisces/garb-n-go#readme",
+  "devDependencies": {
+    "babel-jest": "^26.0.1",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "casual": "^1.6.2",
+    "enzyme-to-json": "^3.4.4",
+    "graphql-tools": "^5.0.0",
+    "jest": "^26.0.1",
+    "jest-transform-graphql": "^2.1.0"
+  },
+  "dependencies": {
+    "apollo-boost": "^0.4.8",
+    "apollo-client": "^2.6.9",
+    "babel-core": "^6.26.3",
+    "babel-plugin-styled-components": "^1.10.7",
+    "date-fns": "^2.13.0",
+    "downshift": "^5.2.7",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "graphql": "^15.0.0",
+    "graphql-tag": "^2.10.3",
+    "lodash.debounce": "^4.0.8",
+    "next": "^9.3.6",
+    "next-with-apollo": "^5.0.1",
+    "nprogress": "^0.2.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-adopt": "^0.6.0",
+    "react-apollo": "^3.1.5",
+    "react-dom": "^16.13.1",
+    "react-stripe-checkout": "^2.6.3",
+    "react-transition-group": "^4.4.1",
+    "styled-components": "^5.1.0",
+    "waait": "^1.0.5"
+  },
+  "babel": {
+    "env": {
+      "development": {
+        "presets": [
+          "next/babel"
+        ],
+        "plugins": [
+          [
+            "styled-components",
+            {
+              "ssr": true,
+              "displayName": true
+            }
+          ]
+        ]
+      },
+      "production": {
+        "presets": [
+          "next/babel"
+        ],
+        "plugins": [
+          [
+            "styled-components",
+            {
+              "ssr": true,
+              "displayName": true
+            }
+          ]
+        ]
+      },
+      "test": {
+
+      },
+      "plugins": [
+
+      ]
+    }
+  }
+}
