@@ -5,6 +5,8 @@ import styled from 'styled-components'
 const Logo = styled.h1`
   font-size: 4rem;
   margin-left: 2rem;
+  margin-bottom: 0rem;
+  margin-top: 0rem;
   position: relative;
   z-index: 2;
   -webkit-filter: drop-shadow(${({theme}) => theme.bs});
@@ -38,6 +40,7 @@ const Logo = styled.h1`
 
 const StyledHeader = styled.header`
   .bar {
+    background-color: ${({ theme }) => theme.yellow};
     border-bottom: 10px solid ${({ theme }) => theme.yellow};
     display: grid;
     grid-template-columns: auto 1fr;

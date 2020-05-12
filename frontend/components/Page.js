@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Meta from './Meta'
+import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
 import Header from './Header'
-import styled, { ThemeProvider, injectGlobal } from 'styled-components'
+import Meta from './Meta'
 
 const theme = {
   red: '#ee205e',
@@ -26,10 +26,39 @@ const Inner = styled.div`
   padding: 2rem;
 `
 
+const GlobalStyle = createGlobalStyle`
+  @font-face {
+    font-family: 'what_time_is_it';
+    src: url('/static/WHATRG__.TTF');
+    format: ('tff');
+    font-weight: normal;
+    font-style: normal;
+  }
+  html {
+    box-sizing: border-box;
+    font-size: 10px;
+  }
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+  body {
+    padding: 0;
+    margin: 0;
+    font-size: 1.5rem;
+    line-height: 2;
+    font-family: 'what_time_is_it';
+  }
+  a {
+    text-decoration: none;
+    color: ${({ theme }) => theme.black}
+  }
+`
+
 class Page extends Component {
   render() {
     return (
       <ThemeProvider theme={theme}>
+        <GlobalStyle />
         <StyledPage>
           <Meta />
           <Header />
