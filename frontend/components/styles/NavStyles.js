@@ -15,6 +15,7 @@ const NavStyles = styled.ul`
     text-transform: uppercase;
     font-weight: 900;
     font-size: 1em;
+    text-shadow: 1px 1px 3px ${({ theme }) => theme.offWhite};
     background: none;
     border: 0;
     cursor: pointer;
