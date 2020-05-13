@@ -1,18 +1,17 @@
-const { GraphQLServer } = require('graphql-yoga')
+require('dotenv').config({ path: 'variables.env' })
+const createServer = require('./createServer')
+const db = require('./db')
 
-const typeDefs = `
-  type Query {
-    hello: String!
-  }
-`
+const server = createServer()
 
-const resolvers = {
-  Query: {
-    hello: (_, args, context, info) => {
-      return "Hello World";
-    }
+// TODO use express middleware to handle cookies
+// TODO use express middleware to populate current users
+
+server.start({
+  cors: {
+    credentials: true,
+    origin: process.env.FRONTEND_URL
   },
-}
-
-const server = new GraphQLServer({ typeDefs, resolvers })
-server.start(() => console.log('Server is running on localhost:4000'))
+}, details => {
+  console.log(`Server is now running on port http:/localhost:${details.port}`)
+})
