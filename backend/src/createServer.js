@@ -15,7 +15,7 @@ function createServer() {
     resolverValidationOptions: {
       requireResolversForResolveType: false
     },
-    context: req => ({ ...req, db }) // surface db on all requests
+    context: req => ({...req, db}) // surface db on all requests
   })
 }
 
