@@ -1,8 +1,8 @@
-const Query = {
-  dogs(parent, args, ctx, info) {
-    global.dogs = global.dogs || []
-    return global.dogs
-  }
+async function items(parent, args, ctx) {
+  const items = await ctx.prisma.items()
+  return items
 }
 
-module.exports = Query
+module.exports = {
+  items
+}

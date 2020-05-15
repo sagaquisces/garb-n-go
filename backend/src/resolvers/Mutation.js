@@ -1,11 +1,11 @@
-const Mutation = {
-  createDog(parent, args, ctx, info) {
-    global.dogs = global.dogs || []
-    // create a dog
-    const newDog = { name: args.name }
-    global.dogs.push(newDog)
-    return newDog
-  }
+async function createItem(parent, args, ctx) {
+  // todo: Check if logged in
+
+  const item = await ctx.prisma.createItem({...args})
+
+  return item
 }
 
-module.exports = Mutation
+module.exports = {
+  createItem,
+}

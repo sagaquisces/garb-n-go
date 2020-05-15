@@ -7,7 +7,7 @@ const Nav = () =>
       <a>home</a>
     </Link>
     <Link href='/'>
-      <a>items</a>
+      <a>shop</a>
     </Link>
     <Link href='/sell'>
       <a>sell</a>
