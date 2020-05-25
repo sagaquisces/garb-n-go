@@ -3,6 +3,12 @@ async function items(parent, args, ctx) {
   return items
 }
 
+async function item(parent, args, ctx) {
+  const item = await ctx.prisma.item(args)
+  return item
+}
+
 module.exports = {
-  items
+  items,
+  item
 }

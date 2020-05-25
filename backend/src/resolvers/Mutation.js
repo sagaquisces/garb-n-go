@@ -6,6 +6,20 @@ async function createItem(parent, args, ctx) {
   return item
 }
 
+function updateItem(parent, args, ctx, info) {
+  // copy the update
+  const updates = { ...args }
+  // remove id from update
+  delete updates.id
+  return ctx.prisma.updateItem({
+    data: updates,
+    where: {
+      id: args.id
+    }
+  }, info)
+}
+
 module.exports = {
   createItem,
+  updateItem
 }
