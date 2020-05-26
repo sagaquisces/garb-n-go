@@ -4,11 +4,28 @@ import Link from 'next/link'
 import Title from './styles/Title'
 import ItemStyles from './styles/ItemStyles'
 import PriceTag from './styles/PriceTag'
+import DeleteItem from './DeleteItem'
 import formatMoney from '../lib/formatMoney'
+import { ALL_ITEMS_QUERY } from './Items'
 
 class Item extends Component {
   static propTypes = {
     item: PropTypes.object.isRequired,
+  }
+
+  handleCacheUpdate = (cache, payload) => {
+    // update cache on client
+    const data = cache.readQuery({ query: ALL_ITEMS_QUERY })
+    console.log("payload.data.deleteItem.id ==>")
+    console.log(payload.data.deleteItem.id)
+    console.log("DATA ==>")
+    console.log(data)
+    // for reasons of immutability, I need to make a copy
+    const newData = {...data}
+    // and then filter out the deleted item
+    newData.items = newData.items.filter(item => item.id !== payload.data.deleteItem.id)
+    // put the items back
+    cache.writeQuery({ query: ALL_ITEMS_QUERY, data: newData})
   }
   render() {
     const { item } = this.props
@@ -36,7 +53,7 @@ class Item extends Component {
             <button>Edit</button>
           </Link>
           <button>Add to Cart</button>
-          <button>Delete</button>
+          <DeleteItem id={item.id} update={this.handleCacheUpdate}>Delete This Item</DeleteItem>
         </div>
       </ItemStyles>
     );

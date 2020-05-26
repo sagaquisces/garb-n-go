@@ -16,10 +16,25 @@ function updateItem(parent, args, ctx, info) {
     where: {
       id: args.id
     }
-  }, info)
+  })
+}
+
+async function deleteItem(parent, args, ctx, info) {
+  console.log("in deleteItemResolver")
+  const where = { id: args.id }
+  console.log(args.id)
+  // find the item
+  const item = await ctx.prisma.item({id: args.id})
+  console.log("ITEM:")
+  console.log(item)
+  // check if the user has persmissions
+  // TODO
+  // Delete it!
+  return ctx.prisma.deleteItem({id: item.id})
 }
 
 module.exports = {
   createItem,
-  updateItem
+  updateItem,
+  deleteItem
 }
