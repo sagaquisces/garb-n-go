@@ -15,6 +15,8 @@ type BatchPayload {
   count: Long!
 }
 
+scalar DateTime
+
 type Item {
   id: ID!
   title: String!
@@ -22,6 +24,7 @@ type Item {
   image: String
   largeImage: String
   price: Int!
+  createdAt: DateTime!
 }
 
 type ItemConnection {
@@ -57,6 +60,8 @@ enum ItemOrderByInput {
   largeImage_DESC
   price_ASC
   price_DESC
+  createdAt_ASC
+  createdAt_DESC
 }
 
 type ItemPreviousValues {
@@ -66,6 +71,7 @@ type ItemPreviousValues {
   image: String
   largeImage: String
   price: Int!
+  createdAt: DateTime!
 }
 
 type ItemSubscriptionPayload {
@@ -181,6 +187,14 @@ input ItemWhereInput {
   price_lte: Int
   price_gt: Int
   price_gte: Int
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
   AND: [ItemWhereInput!]
   OR: [ItemWhereInput!]
   NOT: [ItemWhereInput!]
