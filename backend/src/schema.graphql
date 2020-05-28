@@ -148,6 +148,8 @@ type Mutation {
   signup(email: String!, password: String!, name: String!): User!
   signin(email: String!, password: String!): User!
   signout: SuccessMessage
+  requestReset(email: String!): SuccessMessage
+  resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
 }
 
 type Query {
@@ -165,12 +167,7 @@ type User {
   id: ID!
   name: String!
   email: String!
-  password: String!
-  resetToken: String
-  resetTokenExpiry: Float
   permissions: [Permission!]!
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
 input UserCreateInput {

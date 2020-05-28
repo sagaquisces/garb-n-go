@@ -1,5 +1,8 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const { randomBytes } = require('crypto')
+const { promisify } = require('util')
+const { transport, makeANiceEmail } = require('../mail')
 
 async function createItem(parent, args, ctx) {
   // todo: Check if logged in
@@ -77,9 +80,72 @@ async function signin(parent, { email, password }, ctx, info) {
   // return user
   return user
 }
-async function signout(parent, args, ctx, info) {
+function signout(parent, args, ctx, info) {
   ctx.response.clearCookie('token')
   return { message: 'Goodbye!'}
+}
+async function requestReset(parent, { email }, ctx, info) {
+  // 1. check if real user
+  const user = await ctx.prisma.user({ email })
+  if(!user) {
+    throw new Error(`No such user found for email: ${email}`)
+  }
+  // 2. set reset token and expiry
+  const randomBytesPromisified = promisify(randomBytes)
+  const resetToken = (await randomBytesPromisified(20)).toString('hex')
+  const resetTokenExpiry = Date.now() + 3600000
+  const res = await ctx.prisma.updateUser({
+    where: { email },
+    data: { resetToken, resetTokenExpiry },
+  })
+  // 3. email the reset token
+  const mailRes = await transport.sendMail({
+    from: 'sagaquisces@gmail.com',
+    to: user.email,
+    subject: 'Your Password Reset',
+    html: makeANiceEmail(
+      `Your password reset token is here! \n\n <a href='${process.env.FRONTEND_URL}/reset?resetToken=${resetToken}'>Click here to reset.</a>`
+    )
+  })
+  // 4. return the message
+  return { message: 'Thanks.'}
+}
+async function resetPassword(parent, args, ctx, info) {
+  // 1. check if passwords match
+  if(args.password !== args.confirmPassword) {
+    throw new Error('Passwords do not match')
+  }
+  // 2. check if it's legit
+  // 3. check if expired
+  const [user] = await ctx.prisma.users({
+    where: {
+      resetToken: args.resetToken,
+      resetTokenExpiry_gte: Date.now() - 3600000,
+    },
+  })
+  if(!user) {
+    throw new Error('Token is invalid or expired')
+  }
+  // 4. Hash the new password
+  const password = await bcrypt.hash(args.password, 10)
+  // 5. Save new password to the user and remove old resetToken fields
+  const updatedUser = await ctx.prisma.updateUser({
+    where: { email: user.email },
+    data: {
+      password,
+      resetToken: null,
+      resetTokenExpiry: null,
+    }
+  })
+  // 6. Generate JWT
+  const token = jwt.sign({ userId: updatedUser.id }, process.env.APP_SECRET)
+  // 7. Set JWT cookie
+  ctx.response.cookie('token', token, {
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 * 365,
+  })
+  // 8. return new user
+  return updatedUser
 }
 
 module.exports = {
@@ -89,4 +155,6 @@ module.exports = {
   signup,
   signin,
   signout,
+  requestReset,
+  resetPassword
 }
