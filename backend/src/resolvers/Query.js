@@ -22,8 +22,20 @@ async function itemsConnection(parent, args, ctx) {
   return newItemsConnection
 }
 
+async function me(parent, args, ctx, info) {
+  console.log("ARGS==>")
+  console.log(args)
+  if(!ctx.request.userId) {
+    return null
+  }
+  return ctx.prisma.user({id: ctx.request.userId}, info)
+}
+
+
+
 module.exports = {
   items,
   item,
-  itemsConnection
+  itemsConnection,
+  me
 }

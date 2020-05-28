@@ -14,8 +14,11 @@
   "author": "Michael David Dunlap",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "graphql-yoga": "^1.18.3",
+    "jsonwebtoken": "^8.5.1",
     "nodemon": "^2.0.3",
     "npm-run-all": "^4.1.5",
     "prisma-binding": "^2.3.16",
