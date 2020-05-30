@@ -37,16 +37,22 @@ function updateItem(parent, args, ctx, info) {
 
 async function deleteItem(parent, args, ctx, info) {
   console.log("in deleteItemResolver")
-  const where = { id: args.id }
-  console.log(args.id)
+
   // find the item
-  const item = await ctx.prisma.item({id: args.id})
-  console.log("ITEM:")
-  console.log(item)
+  const ownerOfItem = await ctx.prisma.item({id: args.id}).user()
+  console.log("ITEM FROM RESOLVER: ")
+  console.log(ownerOfItem)
   // check if the user has persmissions
   // TODO
+  const ownsItem = ownerOfItem.id === ctx.request.userId
+  const hasPermissions = ctx.request.user.permissions.some
+    (permission => ['ADMIN', 'ITEMDELETE'].includes(permission))
+
+  if(!ownsItem || !hasPermissions) {
+    throw new Error("You do not have permission to delete.")
+  }
   // Delete it!
-  return ctx.prisma.deleteItem({id: item.id})
+  return ctx.prisma.deleteItem({id: args.id})
 }
 async function signup(parent, args, ctx, info) {
   args.email = args.email.toLowerCase()

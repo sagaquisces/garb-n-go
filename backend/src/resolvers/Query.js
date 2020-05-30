@@ -7,8 +7,10 @@ async function items(parent, args, ctx) {
   return items
 }
 
-async function item(parent, args, ctx) {
-  const item = await ctx.prisma.item(args)
+async function item(parent, args, ctx, info) {
+  console.log('ITEM ARGS:')
+  console.log(args)
+  const item = await ctx.prisma.item(args, info)
   return item
 }
 
@@ -47,8 +49,7 @@ async function users(parent, args, ctx, info) {
   // const users = await ctx.prisma.users(args)
   // return users
   const users = await ctx.prisma.users(args)
-  console.log("in the users resolver ==>")
-  console.log(users)
+
   return users
 }
 
