@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken')
 
 require('dotenv').config({ path: 'variables.env' })
 const createServer = require('./createServer')
-const db = require('./db')
+const { prisma } = require('./generated/prisma-client')
+
 
 const server = createServer()
 
@@ -18,6 +19,33 @@ server.express.use((req, res, next) => {
     req.userId = userId
   }
   next()
+})
+
+// populate user on each request
+server.express.use(async (req, res, next) => {
+  console.log('going to populate user')
+  // not logged in skip this
+  if(!req.userId) return next()
+
+  const user = await prisma.user(
+    { id: req.userId }, 
+    '{ id, permissions, email, name }'
+  )
+
+  console.log("USER FROM MIDDLEWARE")
+  console.log(user)
+  // for some reason not getting what I asked for above,
+  // so I need to manually write to an object with the fields
+  const strippedUser = {
+    id: user.id,
+    permissions: user.permissions,
+    email: user.email,
+    name: user.name
+  }
+  console.log("USER==>")
+  console.log(strippedUser)
+  req.user = user
+  next();
 })
 
 server.start({

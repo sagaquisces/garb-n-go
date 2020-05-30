@@ -1,3 +1,5 @@
+import styled from 'styled-components'
+
 const Button = styled.button`
   background-color: #209CEE;
   color: white;
@@ -16,3 +18,5 @@ const Button = styled.button`
     color: black;
   }
 `
+
+export default Button

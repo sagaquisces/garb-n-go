@@ -1,8 +1,8 @@
 const { Prisma } = require('prisma-binding')
 
-const db = require('./generated/prisma-client/')
+// const db = require('./generated/prisma-client/')
+const { prisma } = require('./generated/prisma-client')
 
-console.log('db')
-console.log(db)
+console.log('prisma')
+console.log(prisma)
 
-module.exports = db 

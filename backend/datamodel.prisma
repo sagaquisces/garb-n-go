@@ -17,6 +17,7 @@ type User {
   permissions: [Permission] @scalarList(strategy: RELATION)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
+  createdItems: [Item!]!
 }
 
 type Item {
@@ -27,4 +28,5 @@ type Item {
   largeImage: String
   price: Int!
   createdAt: DateTime! @createdAt
+  user: User!
 }

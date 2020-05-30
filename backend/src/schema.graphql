@@ -157,6 +157,7 @@ type Query {
   item(id: ID): Item
   itemsConnection(where: ItemWhereInput): ItemConnection!
   me: User
+  users: [User]!
 }
 
 type SuccessMessage {

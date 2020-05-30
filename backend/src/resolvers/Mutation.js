@@ -4,10 +4,20 @@ const { randomBytes } = require('crypto')
 const { promisify } = require('util')
 const { transport, makeANiceEmail } = require('../mail')
 
-async function createItem(parent, args, ctx) {
+async function createItem(parent, args, ctx, info) {
   // todo: Check if logged in
-
-  const item = await ctx.prisma.createItem({...args})
+  if(!ctx.request.userId) {
+    throw new Error('You must be logged in to do that')
+  }
+  // creating a relationship between an item and a user
+  const item = await ctx.prisma.createItem({
+    user: {
+      connect: {
+        id: ctx.request.userId
+      },
+    },
+    ...args
+  }, info)
 
   return item
 }

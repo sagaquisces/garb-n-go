@@ -1,5 +1,9 @@
+const { hasPermissions } = require('../utils')
+
 async function items(parent, args, ctx) {
   const items = await ctx.prisma.items(args)
+  console.log("ITEM ARGS+++++")
+  console.log(args)
   return items
 }
 
@@ -31,11 +35,27 @@ async function me(parent, args, ctx, info) {
   return ctx.prisma.user({id: ctx.request.userId}, info)
 }
 
-
+async function users(parent, args, ctx, info) {
+  // // Logged in?
+  if(!ctx.request.userId) {
+    throw new Error('You must be logged in.')
+  }
+  // Check if user has persmission to run this query
+  hasPermissions(ctx.request.user, ['ADMIN', 'PERMISSIONUPDATE'])
+  // If so, query all the users
+  // console.log("Past hasPermissions")
+  // const users = await ctx.prisma.users(args)
+  // return users
+  const users = await ctx.prisma.users(args)
+  console.log("in the users resolver ==>")
+  console.log(users)
+  return users
+}
 
 module.exports = {
   items,
   item,
   itemsConnection,
-  me
+  me,
+  users,
 }
