@@ -69,6 +69,8 @@ class CreateItem extends Component {
           <Form onSubmit={async e => {
             e.preventDefault()
             const res = await createItem()
+            console.log("FORM SUBMIT=====>>>>>>>")
+            console.log(res)
             Router.push({
               pathname: '/item',
               query: { id: res.data.createItem.id }

@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const { randomBytes } = require('crypto')
 const { promisify } = require('util')
 const { transport, makeANiceEmail } = require('../mail')
+const { hasPermissions } = require('../utils')
 
 async function createItem(parent, args, ctx, info) {
   // todo: Check if logged in
@@ -36,19 +37,16 @@ function updateItem(parent, args, ctx, info) {
 }
 
 async function deleteItem(parent, args, ctx, info) {
-  console.log("in deleteItemResolver")
-
   // find the item
   const ownerOfItem = await ctx.prisma.item({id: args.id}).user()
   console.log("ITEM FROM RESOLVER: ")
   console.log(ownerOfItem)
   // check if the user has persmissions
-  // TODO
   const ownsItem = ownerOfItem.id === ctx.request.userId
   const hasPermissions = ctx.request.user.permissions.some
     (permission => ['ADMIN', 'ITEMDELETE'].includes(permission))
 
-  if(!ownsItem || !hasPermissions) {
+  if(!ownsItem && !hasPermissions) {
     throw new Error("You do not have permission to delete.")
   }
   // Delete it!
@@ -164,6 +162,30 @@ async function resetPassword(parent, args, ctx, info) {
   return updatedUser
 }
 
+async function updatePermissions(parent, args, ctx, info) {
+  // check if logged in
+  if(!ctx.request.userId) {
+    throw new Error('You must be logged in to update.')
+  }
+  // query current user
+  const currentUser = await ctx.prisma.user({
+    id: ctx.request.userId
+  }, info)
+  // check if permissions to do this
+  hasPermissions(currentUser, ['ADMIN', 'PERMISSIONUPDATE'])
+  // update the permissions
+  return ctx.prisma.updateUser({
+    data: {
+      permissions: {
+        set: args.permissions,
+      }
+    },
+    where: {
+      id: args.userId
+    }
+  }, info)
+}
+
 module.exports = {
   createItem,
   updateItem,
@@ -172,5 +194,6 @@ module.exports = {
   signin,
   signout,
   requestReset,
-  resetPassword
+  resetPassword,
+  updatePermissions,
 }

@@ -41,10 +41,13 @@ const SingleItem = (props) => {
       id: props.id
     }}>
       {({ error, loading, data }) => {
+        console.log(props)
         if(error) return <Error error={error} />
         if(loading) return <p>Loading...</p>
         if(!data.item) return <p>No item found for {props.id}</p>
         const item = data.item
+        console.log("ITEM------>>>>>>")
+        console.log(item)
         return (
           <SingleItemStyles>
             <Head>

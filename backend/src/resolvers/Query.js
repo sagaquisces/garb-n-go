@@ -48,7 +48,7 @@ async function users(parent, args, ctx, info) {
   // console.log("Past hasPermissions")
   // const users = await ctx.prisma.users(args)
   // return users
-  const users = await ctx.prisma.users(args)
+  const users = await ctx.prisma.users({}, info)
 
   return users
 }

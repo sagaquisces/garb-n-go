@@ -180,11 +180,12 @@ type Mutation {
   signout: SuccessMessage
   requestReset(email: String!): SuccessMessage
   resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
+  updatePermissions(permissions: [Permission], userId: ID!) : User
 }
 
 type Query {
   items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, first: Int): [Item]!
-  item(where: ItemWhereUniqueInput!): Item
+  item(id: ID!): Item
   itemsConnection(where: ItemWhereInput): ItemConnection!
   me: User
   users: [User]!
