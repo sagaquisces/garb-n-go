@@ -1,6 +1,7 @@
 import React from 'react'
 import { Query, Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
+import { adopt } from 'react-adopt'
 import User from './User'
 import CartStyles from './styles/CartStyles'
 import Supreme from './styles/Supreme'
@@ -22,18 +23,22 @@ const TOGGLE_CART_MUTATION = gql`
   }
 `
 
+const Composed = adopt({
+  user: ({ render }) => <User>{render}</User>,
+  toggleCart: ({ render }) => <Mutation mutation={TOGGLE_CART_MUTATION}>{render}</Mutation>,
+  localState: ({ render }) => <Query query={LOCAL_STATE_QUERY}>{render}</Query>,
+})
+
 const Cart = (props) =>
-  <User>
-    {({ data }) => {
-      if(!data) return null
-      const { me } = data
+  <Composed>
+    {({ user, toggleCart, localState }) => {
+      if(!user.data) return null
+      const me = user.data.me
       console.log(me)
       return (
-        me && <Mutation mutation={TOGGLE_CART_MUTATION}>
-          {(toggleCart) => (
-            <Query query={LOCAL_STATE_QUERY}>
-              {({ data }) => (
-                <CartStyles open={data.cartOpen}>
+
+ 
+                <CartStyles open={localState.data.cartOpen}>
                   <header>
                     <CloseButton onClick={toggleCart} title='close'>&times;</CloseButton>
                     <Supreme>{ me.name } Cart</Supreme>
@@ -47,13 +52,12 @@ const Cart = (props) =>
                     <Button>CHECKOUT</Button>
                   </footer>
                 </CartStyles>
-              )}
-            </Query>
-          )}
-        </Mutation>
+
+
+
       )
     }}
-  </User>
+  </Composed>
 
 export default Cart
 export {
