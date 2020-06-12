@@ -3,6 +3,8 @@ const { prisma } = require('./generated/prisma-client')
 const Mutation = require('./resolvers/Mutation')
 const Query = require('./resolvers/Query')
 const Item = require('./resolvers/Item')
+const User = require('./resolvers/User')
+const CartItem = require('./resolvers/CartItem')
 const db = require('./db')
 
 // create graphql yoga server
@@ -12,7 +14,9 @@ function createServer() {
     resolvers: {
       Mutation,
       Query,
-      Item
+      Item,
+      User,
+      CartItem,
     },
     resolverValidationOptions: {
       requireResolversForResolveType: false

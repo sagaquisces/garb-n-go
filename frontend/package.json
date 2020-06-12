@@ -21,6 +21,7 @@
   "devDependencies": {
     "babel-jest": "^26.0.1",
     "babel-plugin-module-resolver": "^4.0.0",
+    "babel-plugin-styled-components": "^1.10.7",
     "casual": "^1.6.2",
     "enzyme-to-json": "^3.4.4",
     "graphql-tools": "^5.0.0",
@@ -31,7 +32,6 @@
     "apollo-boost": "^0.4.8",
     "apollo-client": "^2.6.9",
     "babel-core": "^6.26.3",
-    "babel-plugin-styled-components": "^1.10.7",
     "date-fns": "^2.13.0",
     "downshift": "^5.2.7",
     "enzyme": "^3.11.0",
@@ -82,9 +82,7 @@
           ]
         ]
       },
-      "test": {
-
-      }
+      "test": {}
     }
   }
 }

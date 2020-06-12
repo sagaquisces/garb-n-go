@@ -39,8 +39,7 @@ function updateItem(parent, args, ctx, info) {
 async function deleteItem(parent, args, ctx, info) {
   // find the item
   const ownerOfItem = await ctx.prisma.item({id: args.id}).user()
-  console.log("ITEM FROM RESOLVER: ")
-  console.log(ownerOfItem)
+
   // check if the user has persmissions
   const ownsItem = ownerOfItem.id === ctx.request.userId
   const hasPermissions = ctx.request.user.permissions.some
@@ -186,6 +185,61 @@ async function updatePermissions(parent, args, ctx, info) {
   }, info)
 }
 
+async function addToCart(parent, args, ctx, info) {
+
+  // Make sure signed in
+  const { userId } = ctx.request;
+  if (!userId) {
+    throw new Error("You must be signed in to add to cart")
+  }
+
+  // Query users current cart
+  const [existingCartItem] = await ctx.prisma.cartItems({
+    where: {
+      user: { id: userId },
+      item: { id: args.id },
+    },
+  })
+  console.log("EXISTING CART ITEM")
+  console.log(existingCartItem)
+  // check if that item is already in the cart and ++
+  if(existingCartItem) {
+    console.log('This item is already in the cart')
+    return ctx.prisma.updateCartItem({
+      where: { id: existingCartItem.id },
+      data: { quantity: existingCartItem.quantity + 1}
+    }, info)
+  }
+  // if not in cart, create new cart item
+  return ctx.prisma.createCartItem({
+    
+      user: {
+        connect: { id: userId },
+      },
+      item: {
+        connect: { id: args.id }
+      }
+    
+  }, info)
+}
+
+async function removeFromCart(parent, args, ctx, info) {
+  // find cart item
+  const cartItem = await ctx.prisma.cartItem({
+    id: args.id,
+  })
+
+
+  if(!cartItem) throw new Error('No Cart Item Found.')
+  // make sure they own the item
+  // 
+  // if(cartItem.user.id !== ctx.request.userId) {
+  //   throw new Error("You don't own this item")
+  // }
+  // delete the item
+  return ctx.prisma.deleteCartItem({ id: args.id }, info)
+}
+
 module.exports = {
   createItem,
   updateItem,
@@ -196,4 +250,6 @@ module.exports = {
   requestReset,
   resetPassword,
   updatePermissions,
+  addToCart,
+  removeFromCart,
 }

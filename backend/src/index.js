@@ -23,7 +23,7 @@ server.express.use((req, res, next) => {
 
 // populate user on each request
 server.express.use(async (req, res, next) => {
-  console.log('going to populate user')
+
   // not logged in skip this
   if(!req.userId) return next()
 
@@ -32,8 +32,7 @@ server.express.use(async (req, res, next) => {
     '{ id, permissions, email, name }'
   )
 
-  console.log("USER FROM MIDDLEWARE")
-  console.log(user)
+
   // for some reason not getting what I asked for above,
   // so I need to manually write to an object with the fields
   const strippedUser = {
@@ -42,8 +41,7 @@ server.express.use(async (req, res, next) => {
     email: user.email,
     name: user.name
   }
-  console.log("USER==>")
-  console.log(strippedUser)
+
   req.user = user
   next();
 })

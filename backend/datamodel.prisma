@@ -18,6 +18,7 @@ type User {
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   createdItems: [Item!]!
+  cart: [CartItem]!
 }
 
 type Item {
@@ -28,5 +29,12 @@ type Item {
   largeImage: String
   price: Int!
   createdAt: DateTime! @createdAt
+  user: User!
+}
+
+type CartItem {
+  id: ID! @id
+  quantity: Int! @default(value: 1)
+  item: Item!
   user: User!
 }
