@@ -231,7 +231,7 @@ export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
 export interface CartItemUpdateInput {
   quantity?: Maybe<Int>;
-  item?: Maybe<ItemUpdateOneRequiredInput>;
+  item?: Maybe<ItemUpdateOneInput>;
   user?: Maybe<UserUpdateOneRequiredWithoutCartInput>;
 }
 
@@ -412,7 +412,7 @@ export interface CartItemWhereInput {
 export interface CartItemCreateWithoutUserInput {
   id?: Maybe<ID_Input>;
   quantity?: Maybe<Int>;
-  item: ItemCreateOneInput;
+  item?: Maybe<ItemCreateOneInput>;
 }
 
 export interface CartItemSubscriptionWhereInput {
@@ -498,10 +498,12 @@ export type UserWhereUniqueInput = AtLeastOne<{
   email?: Maybe<String>;
 }>;
 
-export interface ItemUpdateOneRequiredInput {
+export interface ItemUpdateOneInput {
   create?: Maybe<ItemCreateInput>;
   update?: Maybe<ItemUpdateDataInput>;
   upsert?: Maybe<ItemUpsertNestedInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
   connect?: Maybe<ItemWhereUniqueInput>;
 }
 
@@ -624,7 +626,7 @@ export interface UserUpdateOneRequiredWithoutCreatedItemsInput {
 export interface CartItemCreateInput {
   id?: Maybe<ID_Input>;
   quantity?: Maybe<Int>;
-  item: ItemCreateOneInput;
+  item?: Maybe<ItemCreateOneInput>;
   user: UserCreateOneWithoutCartInput;
 }
 
@@ -816,7 +818,7 @@ export interface ItemUpdateInput {
 
 export interface CartItemUpdateWithoutUserDataInput {
   quantity?: Maybe<Int>;
-  item?: Maybe<ItemUpdateOneRequiredInput>;
+  item?: Maybe<ItemUpdateOneInput>;
 }
 
 export interface ItemUpdateManyDataInput {

@@ -27,11 +27,34 @@ class RemoveFromCart extends React.Component {
   static propTypes = {
     id: PropTypes.string.isRequired,
   }
+  // this happens as soon as we receive a response
+  // from server after mutation
+  update = (cache, payload) => {
+    console.log('Running remove from cart fn')
+    // first read the cache
+    const data = cache.readQuery({
+      query: CURRENT_USER_QUERY
+    })
+    console.log(data)
+    // remove that item from cart
+    const cartItemId = payload.data.removeFromCart.id
+    data.me.cart = data.me.cart.filter(cartItem => cartItem.id !== cartItemId)
+    // write back to cache
+    cache.writeQuery({ query: CURRENT_USER_QUERY, data })
+  }
   render() {
     return (
       <Mutation 
         mutation={REMOVE_FROM_CART_MUTATION}
         variables={{id: this.props.id}}
+        update={this.update}
+        optimisticResponse={{
+          __typename: 'Mutation',
+          removeFromCart: {
+            id: this.props.id,
+            __typename: 'CartItem'
+          },
+        }}
       >
         {(removeFromCart, {loading, error}) => 
           <BigButton 

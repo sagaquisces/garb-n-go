@@ -117,7 +117,7 @@ type AggregateItem {
 type CartItem {
   id: ID!
   quantity: Int!
-  item: Item!
+  item: Item
   user: User!
 }
 
