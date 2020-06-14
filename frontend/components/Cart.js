@@ -10,6 +10,7 @@ import Button from './styles/Button'
 import CartItem from './CartItem'
 import formatMoney from '../lib/formatMoney'
 import calcTotalPrice from '../lib/calcTotalPrice'
+import TakeMyMoney from './TakeMyMoney'
 
 const LOCAL_STATE_QUERY = gql`
   query {
@@ -36,25 +37,23 @@ const Cart = (props) =>
       const me = user.data.me
       console.log(me)
       return (
-
- 
-                <CartStyles open={localState.data.cartOpen}>
-                  <header>
-                    <CloseButton onClick={toggleCart} title='close'>&times;</CloseButton>
-                    <Supreme>{ me.name } Cart</Supreme>
-                    <p>You have <strong>{me.cart.length}</strong> Item{me.cart.length !== 1 && 's'} in your cart.</p>
-                  </header>
-                  <ul>
-                    {me.cart.map(cartItem => <CartItem key={cartItem.id} cartItem={cartItem} />)}
-                  </ul>
-                  <footer>
-                    <p>{formatMoney(calcTotalPrice(me.cart))}</p>
-                    <Button>CHECKOUT</Button>
-                  </footer>
-                </CartStyles>
-
-
-
+        <CartStyles open={localState.data.cartOpen}>
+          <header>
+            <CloseButton onClick={toggleCart} title='close'>&times;</CloseButton>
+            <Supreme>{ me.name } Cart</Supreme>
+            <p>You have <strong>{me.cart.length}</strong> Item{me.cart.length !== 1 && 's'} in your cart.</p>
+          </header>
+          <ul>
+            {me.cart.map(cartItem => <CartItem key={cartItem.id} cartItem={cartItem} />)}
+          </ul>
+          <footer>
+            <p>{formatMoney(calcTotalPrice(me.cart))}</p>
+            <TakeMyMoney>
+              <Button>CHECKOUT</Button>
+            </TakeMyMoney>
+            
+          </footer>
+        </CartStyles>
       )
     }}
   </Composed>
