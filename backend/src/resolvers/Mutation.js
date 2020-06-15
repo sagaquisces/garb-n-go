@@ -4,6 +4,7 @@ const { randomBytes } = require('crypto')
 const { promisify } = require('util')
 const { transport, makeANiceEmail } = require('../mail')
 const { hasPermissions } = require('../utils')
+const stripe = require('../stripe')
 
 async function createItem(parent, args, ctx, info) {
   // todo: Check if logged in
@@ -240,6 +241,57 @@ async function removeFromCart(parent, args, ctx, info) {
   return ctx.prisma.deleteCartItem({ id: args.id }, info)
 }
 
+async function createOrder(parent, args, ctx, info) {
+  const { userId } = ctx.request
+  if(!userId) throw new Error('You must be signed in to complete order')
+  const user = await ctx.prisma.user(
+    { id: userId },
+  )
+
+  const userCart = await ctx.prisma.user({ id: userId }).cart()
+
+  console.log(userCart)
+  // as we reduce below, we'll create an order item object to put into this array
+  const orderItems = []
+
+  const amount = await userCart.reduce(
+    async (tally, cartItem) => {
+      let item = await ctx.prisma.cartItem({ id: cartItem.id }).item()
+      let orderItem = {
+        ...item,
+        quantity: cartItem.quantity,
+        user: { connect: { id: userId }}
+      }
+      delete orderItem.id // don't want id from cart item
+      delete orderItem.createdAt
+      orderItems.push(orderItem)
+ 
+      // in a reduce function, you need to await the tally too.
+      return (await tally) + item.price * cartItem.quantity
+    },0)
+
+  const charge = await stripe.charges.create({
+    amount,
+    currency: "USD",
+    source: args.token,
+  })
+
+  // now, create the order for records
+  const order = await ctx.prisma.createOrder({
+    total: charge.amount,
+    charge: charge.id,
+    items: { create: orderItems },
+    user: { connect: { id: userId }}
+  })
+
+  // clear the cart
+  const cartItemIds = userCart.map(cartItem => cartItem.id)
+  await ctx.prisma.deleteManyCartItems({
+    id_in: cartItemIds,
+  })
+  return order
+}
+
 module.exports = {
   createItem,
   updateItem,
@@ -252,4 +304,5 @@ module.exports = {
   updatePermissions,
   addToCart,
   removeFromCart,
+  createOrder,
 }

@@ -35,23 +35,25 @@ const Cart = (props) =>
     {({ user, toggleCart, localState }) => {
       if(!user.data) return null
       const me = user.data.me
+      console.log("ME+++++++++++++++")
       console.log(me)
       return (
         <CartStyles open={localState.data.cartOpen}>
           <header>
             <CloseButton onClick={toggleCart} title='close'>&times;</CloseButton>
-            <Supreme>{ me.name } Cart</Supreme>
-            <p>You have <strong>{me.cart.length}</strong> Item{me.cart.length !== 1 && 's'} in your cart.</p>
+            <Supreme>{ me ? me.name : '' } Cart</Supreme>
+            <p>You have <strong>{me ? me.cart.length : ''}</strong> Item{(me && me.cart.length !== 1) ? 's' : ''} in your cart.</p>
           </header>
           <ul>
-            {me.cart.map(cartItem => <CartItem key={cartItem.id} cartItem={cartItem} />)}
+            {me ? me.cart.map(cartItem => <CartItem key={cartItem.id} cartItem={cartItem} />) : null}
           </ul>
           <footer>
-            <p>{formatMoney(calcTotalPrice(me.cart))}</p>
-            <TakeMyMoney>
-              <Button>CHECKOUT</Button>
-            </TakeMyMoney>
-            
+            <p>{me ? formatMoney(calcTotalPrice(me.cart)) : ''}</p>
+            {(me && me.cart.length) ? (
+              <TakeMyMoney>
+                <Button>CHECKOUT</Button>
+              </TakeMyMoney>
+            ) : null}
           </footer>
         </CartStyles>
       )
