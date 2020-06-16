@@ -49,11 +49,14 @@ server.express.use(async (req, res, next) => {
   next();
 })
 
-server.start({
-  cors: {
-    credentials: true,
-    origin: process.env.FRONTEND_URL
+server.start(
+  // {
+  //   cors: {
+  //     credentials: true,
+  //     origin: process.env.FRONTEND_URL
+  //   }
+  // }, 
+  details => {
+    console.log(`Server is now running on 4000`)
   }
-}, details => {
-  console.log(`Server is now running on 4000`)
-})
+)
