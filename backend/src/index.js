@@ -27,6 +27,9 @@ server.express.use(async (req, res, next) => {
   // not logged in skip this
   if(!req.userId) return next()
 
+  console.log("Should not get to this point")
+  console.log(req.userId)
+
   const user = await prisma.user(
     { id: req.userId }, 
     '{ id, permissions, email, name }'
