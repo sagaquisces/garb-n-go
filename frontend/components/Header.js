@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Router from 'next/router'
 import NProgress from 'nprogress'
 import Cart from './Cart'
-import Search from './Search'
+import Search from './Search.hide'
 
 Router.onRouteChangeStart = () => {
   NProgress.start()
