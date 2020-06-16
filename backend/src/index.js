@@ -9,11 +9,6 @@ const server = createServer()
 
 server.express.use(cookieParser())
 
-server.express.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
-
 // decode the JWT so we can get user id
 server.express.use((req, res, next) => {
   const { token } = req.cookies
