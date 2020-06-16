@@ -1,10 +1,12 @@
-async function items(parent, args, ctx, info) {
+function items(parent, args, ctx, info) {
+  return ctx.prisma.order({ id: parent.id }).items()
+}
 
-  const items = await ctx.prisma.order({ id: parent.id }).items()
-
-  return items
+function user(parent, args, ctx, info) {
+  return ctx.prisma.order({ id: parent.id }).user()
 }
 
 module.exports = {
   items,
+  user,
 }

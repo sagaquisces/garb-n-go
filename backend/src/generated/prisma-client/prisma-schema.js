@@ -620,6 +620,7 @@ interface Node {
 
 type Order {
   id: ID!
+  createdAt: DateTime!
   items(where: OrderItemWhereInput, orderBy: OrderItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [OrderItem!]
   total: Int!
   user: User!
@@ -986,6 +987,8 @@ input OrderItemWhereUniqueInput {
 enum OrderOrderByInput {
   id_ASC
   id_DESC
+  createdAt_ASC
+  createdAt_DESC
   total_ASC
   total_DESC
   charge_ASC
@@ -994,6 +997,7 @@ enum OrderOrderByInput {
 
 type OrderPreviousValues {
   id: ID!
+  createdAt: DateTime!
   total: Int!
   charge: String!
 }
@@ -1043,6 +1047,14 @@ input OrderWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
   items_every: OrderItemWhereInput
   items_some: OrderItemWhereInput
   items_none: OrderItemWhereInput

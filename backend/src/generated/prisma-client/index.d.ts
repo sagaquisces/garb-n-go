@@ -306,6 +306,8 @@ export type OrderItemOrderByInput =
 export type OrderOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
   | "total_ASC"
   | "total_DESC"
   | "charge_ASC"
@@ -1409,6 +1411,14 @@ export interface OrderWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
   items_every?: Maybe<OrderItemWhereInput>;
   items_some?: Maybe<OrderItemWhereInput>;
   items_none?: Maybe<OrderItemWhereInput>;
@@ -1506,12 +1516,14 @@ export interface UserPreviousValuesSubscription
 
 export interface Order {
   id: ID_Output;
+  createdAt: DateTimeOutput;
   total: Int;
   charge: String;
 }
 
 export interface OrderPromise extends Promise<Order>, Fragmentable {
   id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
   items: <T = FragmentableArray<OrderItem>>(args?: {
     where?: OrderItemWhereInput;
     orderBy?: OrderItemOrderByInput;
@@ -1530,6 +1542,7 @@ export interface OrderSubscription
   extends Promise<AsyncIterator<Order>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   items: <T = Promise<AsyncIterator<OrderItemSubscription>>>(args?: {
     where?: OrderItemWhereInput;
     orderBy?: OrderItemOrderByInput;
@@ -1548,6 +1561,7 @@ export interface OrderNullablePromise
   extends Promise<Order | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
   items: <T = FragmentableArray<OrderItem>>(args?: {
     where?: OrderItemWhereInput;
     orderBy?: OrderItemOrderByInput;
@@ -1564,6 +1578,7 @@ export interface OrderNullablePromise
 
 export interface OrderPreviousValues {
   id: ID_Output;
+  createdAt: DateTimeOutput;
   total: Int;
   charge: String;
 }
@@ -1572,6 +1587,7 @@ export interface OrderPreviousValuesPromise
   extends Promise<OrderPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
   total: () => Promise<Int>;
   charge: () => Promise<String>;
 }
@@ -1580,6 +1596,7 @@ export interface OrderPreviousValuesSubscription
   extends Promise<AsyncIterator<OrderPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   total: () => Promise<AsyncIterator<Int>>;
   charge: () => Promise<AsyncIterator<String>>;
 }
