@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import debounce from 'lodash.debounce'
 import { DropDown, DropDownItem, SearchStyles } from './styles/DropDown'
 
+// just a little bit to trigger git change
 const SEARCH_ITEMS_QUERY = gql`
   query searchItemsQuery($searchTerm: String!) {
     items(
