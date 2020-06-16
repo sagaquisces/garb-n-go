@@ -5,7 +5,6 @@ require('dotenv').config({ path: 'variables.env' })
 const createServer = require('./createServer')
 const { prisma } = require('./generated/prisma-client')
 
-
 const server = createServer()
 
 server.express.use(cookieParser())
@@ -50,12 +49,12 @@ server.express.use(async (req, res, next) => {
 })
 
 server.start(
-  // {
-  //   cors: {
-  //     credentials: true,
-  //     origin: process.env.FRONTEND_URL
-  //   }
-  // }, 
+  {
+    cors: {
+      credentials: true,
+      origin: process.env.FRONTEND_URL
+    }
+  }, 
   details => {
     console.log(`Server is now running on 4000`)
   }
